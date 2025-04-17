@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseIA - Gerador de casos de testes inteligente</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicon-16x16.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="icon" href="/static/img/favicon-32x32.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo-container">
+            <a href="/" aria-label="Página inicial" class="logo-container">
+                <img src="/static/img/LOGO-1.PNG-removebg-preview.png" alt="Logo do CaseIA" style="height: 40px; margin-right: 8px;">
+                <span style="font-size: 1.5rem; font-weight: bold;">CaseIA</span>
+            </a>
+        </div>
+        <div class="button-container">
+            <a href="{{ url_for('logout') }}" class="Sair-container">Sair</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1>Bem-vindo, {{ username }}!</h1>
+            <p>Ao gerador de casos de testes inteligente.</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="options-container">
+            <h2 class="center-text">Escolha o tipo de teste</h2>
+            <div class="button-options">
+                <button type="button" class="option-btn" onclick="window.location.href='/tests_manuais'">
+                    <i class="fas fa-clipboard-list"></i>
+                    Testes manuais
+                </button>
+                <button type="button" class="option-btn" onclick="window.location.href='/tests_automatizados'">
+                    <i class="fas fa-robot"></i>
+                    Testes automatizados
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Adiciona o VLibras -->
+    {{ vlibras_script|safe }}
+
+    <footer>
+        <div class="footer-text">
+            <p>&copy; 2025 CaseIA. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

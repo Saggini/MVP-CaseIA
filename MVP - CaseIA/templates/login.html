@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CaseIA</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicon-16x16.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="icon" href="/static/img/favicon-32x32.png" type="image/x-icon" alt="Ícone do site">
+</head>
+<body>
+    
+    <div class="navbar">
+    <div class="logo-container">
+        <a href="/" aria-label="Página inicial" class="logo-container">
+            <img src="/static/img/LOGO-1.PNG-removebg-preview.png" alt="Logo do CaseIA" style="height: 40px; margin-right: 8px;">
+            <span style="font-size: 1.5rem; font-weight: bold;">CaseIA</span>
+        </a>
+    </div>
+    </div>
+    <!-- Exibir mensagens flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}                                  
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+    <div class="login-container">
+        <h1>Login</h1>
+        <br>
+        <form id="login-form" action="/login" method="POST">
+            <label for="username">Nome de usuário:</label>
+            <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário aqui ..." required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" placeholder="Digite sua senha aqui ..." required>
+
+            <button type="submit" class="btn-login">Logar</button>
+        </form>
+        <br>            
+        <a href="{{ url_for('login_google') }}">
+            <button class="btn-google">
+                <img src="{{ url_for('static', filename='img/Google.png') }}" alt="Google Logo">
+                Logar com o Google
+            </button>
+        </a>
+        <br
+        <p><a href="/forgot-password">Esqueci minha senha</a></p>
+    </div>
+
+
+<!-- Logo no canto superior esquerdo -->
+    <!-- Script do Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para exibir a mensagem e redirecionar após 3 segundos -->
+    <script>
+ document.addEventListener("DOMContentLoaded", function() {
+        var successAlert = document.querySelector(".alert-success");
+        var dangerAlert = document.querySelector(".alert-danger");
+
+        // Se a mensagem de sucesso estiver presente
+        if (successAlert) {
+            setTimeout(function() {
+                successAlert.classList.add("fade-out");
+
+                // Atraso antes de redirecionar para a página index
+                setTimeout(function() {
+                    window.location.href = "/index";  // Redireciona para a página inicial (ou qualquer página de sua escolha)
+                }, 1000); // Atraso de 1 segundo após a animação de fade-out
+            }, 1000); // Exibe a mensagem de sucesso por 3 segundos
+        }
+
+        // Se a mensagem de erro estiver presente
+        if (dangerAlert) {
+            setTimeout(function() {
+                dangerAlert.classList.add("fade-out");
+            }, 1000); // Exibe a mensagem de erro por 3 segundos
+        }
+    });
+    </script>
+
+    <!-- Adiciona o VLibras -->
+    {{ vlibras_script|safe }}
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CaseIA: Gerencie casos de testes inteligentes com funcionalidades como geração automática de BDD, suporte a múltiplos sistemas e exportação de testes em CSV.">
+    <title>Bem-vindo ao CaseIA - Gerenciador de casos de testes inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicon-16x16.png" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon-32x32.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo-container">
+        <a href="/" aria-label="Página inicial" class="logo-container">
+            <img src="/static/img/LOGO-1.PNG-removebg-preview.png" alt="Logo do CaseIA" style="height: 40px; margin-right: 8px;">
+            <span style="font-size: 1.5rem; font-weight: bold;">CaseIA</span>
+        </a>
+       </div>
+        <div class="button-container">
+            <a href="/login" class="btn">Login</a>
+            <a href="/cadastro" class="btn">Cadastrar-se</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <h1>Bem-vindo ao CaseIA</h1>
+           
+        </div>
+    </header>
+    
+
+    <main>
+        <section class="intro">
+            <h2>Sobre o CaseIA</h2>
+            <p>Descubra como o CaseIA pode transformar seu dia a dia como QA! Com recursos avançados e uma interface intuitiva, nossa plataforma gera casos de teste automaticamente, ajudando você a garantir a qualidade do seu software de forma eficiente e escalável.</p>
+        </section>
+        
+        <section class="features">
+            <h2>Funcionalidades</h2>
+            <ul>
+                <li>Geração automática de casos de teste com base nos critérios de aceite.</li>
+                <li>Suporte a múltiplos tipos de sistemas, incluindo Web, API, Mobile e Desktop.</li>
+                <li>Suporte a Cypress, Playwright, Robot Framework, Selenium e Postman.</li>
+                <li>Histórico completo dos testes gerados.</li>
+                <li>Exportação em CSV para armazenamento e compartilhamento.</li>
+                <li>Interface intuitiva para fácil uso e visualização.</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Adiciona o VLibras -->
+    {{ vlibras_script|safe }}
+
+    <footer>
+        <div class="footer-text">
+            <p>&copy; 2025 CaseIA. Todos os direitos reservados.</p>
+        </footer>
+</body>
+</html>

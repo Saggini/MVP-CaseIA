@@ -1,0 +1,958 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: black;
+}
+
+/* Botões da Navbar */
+.navbar .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar .btn:hover {
+    background-color: #0056b3;
+}
+
+.cadastro {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+.cadastro h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cadastro .form-group {
+    margin-bottom: 15px;
+}
+
+.cadastro .form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.cadastro .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cadastro .button {
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cadastro .button:hover {
+    background: #0056b3;
+}
+
+.cadastro .success {
+    color: green;
+    margin: 10px 0;
+}
+
+.cadastro .danger {
+    color: red;
+    margin: 10px 0;
+}
+
+/* Containers reutilizáveis */
+.container {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container-results {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 30px;
+    display: none;
+}
+
+/* ----- Global Styles ----- */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* ----- Layout ----- */
+.index {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 40px 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 30px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+/* ----- Forms ----- */
+textarea, select, input[type="file"], button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: vertical; /* Permite redimensionar verticalmente */
+    box-sizing: border-box; /* Considera o padding dentro da largura */
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.footer-text {
+    position: flex;
+    bottom: 20px; /* Espaço entre o texto e a borda inferior */
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+
+.results-container {
+    margin-top: 30px; /* Adiciona espaço entre os containers */
+}
+
+#results {
+    background-color: white;
+    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.welcome-container {
+    color: black;
+    text-align: center;
+    padding: 12px 30px !important;  /* Ajuste a altura do botão */
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: flex-end; /* Alinha os itens à direita */
+    gap: 20px;
+    position: fixed;  /* Mantém a div fixa no canto da tela */
+    top: 10px;        /* Distância do topo da tela */
+    left: 0px;      /* Distância da borda direita da tela */
+}
+
+.expandable {
+    overflow: auto; /* Adiciona barra de rolagem se necessário */
+    transition: max-height 0.3s ease; /* Transição suave */
+    text-align: center;
+    color: black;
+    padding: 60px 20px;
+}
+
+.Sair-container {
+    color: black;
+    text-align: center;
+    padding: 12px 30px !important;  /* Ajuste a altura do botão */
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: flex-end; /* Alinha os itens à direita */
+    gap: 20px;
+    position: fixed;  /* Mantém a div fixa no canto da tela */
+    top: 10px;        /* Distância do topo da tela */
+    right: 20px;      /* Distância da borda direita da tela */
+}
+
+/* Estilização dos botões */
+.btn {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 8px 20px; /* Diminuir o tamanho dos botões */
+    font-size: 0.9rem; /* Ajustar o tamanho da fonte */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    min-width: 120px; /* Diminuir o tamanho mínimo do botão */
+    white-space: nowrap; /* Impede quebra de linha dentro do botão */
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+.btn-login {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 8px 20px; /* Diminuir o tamanho dos botões */
+    font-size: 0.9rem; /* Ajustar o tamanho da fonte */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    min-width: 120px; /* Diminuir o tamanho mínimo do botão */
+    white-space: nowrap; /* Impede quebra de linha dentro do botão */
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+.copy-button, .export-buttons {
+    text-decoration: none;
+    padding: 8px 20px; /* Diminuir o tamanho dos botões */
+    font-size: 0.9rem; /* Ajustar o tamanho da fonte */
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    min-width: 120px; /* Diminuir o tamanho mínimo do botão */
+    white-space: nowrap; /* Impede quebra de linha dentro do botão */
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+.btn:hover {
+    background-color: #0056b3;
+ 
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Botões Específicos */
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #f11506;
+}
+
+.btn-danger:hover {
+    background-color: #d00c00;
+}
+
+/* Container dos botões */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo-img {
+    display: block; 
+    margin: 0 auto 20px; 
+    max-width: 200px;
+}
+
+/* Estilização do corpo */
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    background: url('/static/img/IA 3.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    line-height: 1.6;
+    position: relative;
+}
+
+/* Camada de desfoque sobre a imagem */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+}
+
+/* Formulários e Inputs */
+textarea, select, input, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: white;
+    color: black;
+    transition: border-color 0.3s ease;
+}
+
+textarea {
+    overflow-y: scroll;
+    height: 400px;
+    width: 90%;
+    margin: 0 auto; /* Centralizar a caixa de textarea */
+    display: block; /* Garantir que o elemento seja um bloco */
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Estilização do Cabeçalho */
+header {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 40px 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.header-content h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.header-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+/* Seção de Introdução e Recursos */
+.intro, .features {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-width: 800px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.features ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.features ul li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    padding-left: 30px; /* Aumenta o espaço para o ícone */
+    position: relative;
+}
+
+.features ul li:before {
+    content: '✔';
+    color: #007bff;
+    position: absolute;
+    left: 0;
+    top: 50%; /* Centraliza verticalmente o ícone */
+    transform: translateY(-50%); /* Ajusta a posição vertical */
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: black;
+    margin-top: 20px;
+}
+
+/* Estilização do link do logo */
+.logo-container {
+    top: 17px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Login e Registro */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-container label {
+    font-weight: bold;
+}
+
+/* Mensagens de alerta */
+.alert {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    margin: 10px auto;
+    width: 200px;
+    height: 60px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+}
+
+.alert-danger {
+    background-color: #f11506;
+}
+
+.alert.fade-out {
+    animation: fadeOut 1s forwards !important;
+}
+
+/* Espaço reservado para mensagens de alerta */
+.alert-placeholder {
+    height: 60px; /* Ajuste a altura conforme necessário */
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.voltar-para-o-login {
+    color: #fff;
+    text-align: center;
+}
+
+#test-case-output {
+    white-space: pre-wrap;  /* Mantém a formatação do texto */
+    background-color: #f9f9f9;  /* Cor de fundo para o texto aparecer */
+    color: #333;  /* Cor do texto */
+    padding: 15px;  /* Espaço interno para o texto não ficar grudado */
+    border: 1px solid #ddd;  /* Borda leve para o container */
+    border-radius: 5px;  /* Bordas arredondadas */
+    max-height: 300px;  /* Altura máxima para evitar quebra no layout */
+    overflow-y: auto;  /* Adiciona rolagem se o texto for muito grande */
+    display: block;  /* Garante que o texto seja exibido */
+}
+
+#loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: 18px;
+}
+
+.spinner {
+    border: 6px solid #f3f3f3; /* Cor de fundo do spinner */
+    border-top: 6px solid #007BFF; /* Cor da animação */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilização do histórico */
+
+h1 {
+    color: #333;
+}
+
+.history-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    margin-bottom: 10px; /* Adiciona espaçamento entre os itens */
+}
+.history-item:last-child {
+    border-bottom: none;
+}
+pre {
+    background: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+button {
+    margin: 5px;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.copy-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+.copy-btn:hover {
+    background-color: #45a049;
+}
+.edit-btn {
+    background-color: #2196F3;
+    color: white;
+}
+.back-btn {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+    margin: 2rem auto 0;
+    text-align: center;
+}
+.back-btn:hover {
+    background-color: #007bb5;
+}
+.historico-container {
+    color: black;
+    text-align: center;
+    padding: 12px 30px !important;  /* Ajuste a altura do botão */
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: flex-end; /* Alinha os itens à direita */
+    gap: 20px;
+    position: fixed;  /* Mantém a div fixa no canto da tela */
+    top: 10px;        /* Distância do topo da tela */
+    left: 0px;      /* Distância da borda direita da tela */
+}
+
+.historico-container2 {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+.historico-container3 {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+.historico-item-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+/* Melhorias de acessibilidade */
+button:focus, input:focus, select:focus, textarea:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+[aria-live="polite"] {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Estilização dos botões de Editar e Salvar Edições */
+.edit-buttons {
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px; /* Espaço entre os botões */
+}
+
+.edit-buttons button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.edit-buttons button:hover {
+    background-color: #e0e0e0;
+}
+
+.options-container {
+    background: linear-gradient(135deg, #007bff, #6c63ff);
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.button-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.option-btn {
+    flex: 1;
+    padding: 15px 20px;
+    background-color: white;
+    color: black#007bff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.option-btn i {
+    font-size: 1.5em;
+}
+
+.option-btn:hover {
+    background-color: #0056b3;
+    color: white;
+    transform: scale(1.05);
+}
+
+.option-btn:active {
+    transform: scale(0.98);
+}
+
+#search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.gerar-historico {
+    display: flex;
+     justify-content: space-between; 
+     align-items: center;
+}
+
+/* Estilos para a modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000; /* Certifique-se de que a modal esteja acima de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com transparência */
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px; /* Largura máxima da modal */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidade */
+    animation: fadeIn 0.3s ease-in-out; /* Animação de entrada suave */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    gap: 10px; /* Espaço entre os botões */
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-actions .btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-actions .btn:hover {
+    background-color: #0056b3;
+}
+
+.modal-actions .btn-danger {
+    background-color: #f11506;
+}
+
+.modal-actions .btn-danger:hover {
+    background-color: #d00c00;
+}
+
+/* Estilos para a classe privacy-agreement */
+.privacy-checkbox {
+    display: flex;
+    align-items: center; /* Alinha verticalmente */
+    font-size: 14px;
+    white-space: nowrap;
+    gap: 5px; /* Espaço entre o checkbox e o texto */
+    margin-left: 0; /* Remove qualquer margem extra */
+    width: 100%; /* Ocupa a largura total do container */
+}
+
+#terms-link {
+    color: #007bff; /* Cor azul padrão */
+    text-decoration: none; /* Remove o sublinhado */
+    font-weight: bold; /* Deixa o texto em negrito */
+}
+
+#terms-link:hover {
+    color: #007bff; /* Cor azul mais escura ao passar o mouse */
+    text-decoration: underline; /* Adiciona sublinhado no hover */
+}
+
+.privacy-checkbox input[type="checkbox"] {
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.privacy-checkbox label {
+    cursor: pointer;
+}
+
+/* Garante que a checkbox fique alinhada com os outros campos */
+.cadastro .form-group.privacy-checkbox {
+    display: flex;
+    justify-content: flex-start; /* Alinha tudo à esquerda */
+    padding-left: 0;
+    margin-left: 0;
+}
+
+a[href="/forgot-password"] {
+    color: #007bff; /* Cor laranja (substitua pela cor desejada) */
+    text-decoration: none; /* Remove o sublinhado */
+    font-weight: bold; /* Deixa o texto em negrito */
+    text-align: right;
+}
+
+a[href="/forgot-password"]:hover {
+    color: black; /* Cor mais escura ao passar o mouse */
+    text-decoration: underline; /* Adiciona sublinhado no hover */
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.botao-google a {
+    text-decoration: none;
+  }
+
+  a {
+    text-decoration: none;
+  }
+  
+.btn-google:hover {
+    background-color: #007BFF;
+}
+
+.btn-google img {
+    background: white;
+    border-radius: 2px;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}

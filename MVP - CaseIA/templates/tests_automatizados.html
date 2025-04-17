@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseIA - Gerador de casos de testes inteligente</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicon-16x16.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="icon" href="/static/img/favicon-32x32.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        function showAlert(event) {
+            alert("Os casos de testes sugeridos devem ser revisados para validação da sua eficiência!");
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('test-case-output');
+            const text = output.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Casos de teste copiados para a área de transferência!');
+            }).catch(err => {
+                alert('Erro ao copiar os casos de teste: ' + err);
+            });
+        }
+
+        function enableEditing() {
+            const testCaseOutput = document.getElementById("test-case-output");
+            testCaseOutput.contentEditable = true;
+            testCaseOutput.focus();
+        }
+
+        async function saveEdits() {
+            const testCaseOutput = document.getElementById("test-case-output");
+            const editedTests = testCaseOutput.innerText;
+
+            try {
+                const response = await fetch('/save_edited_tests', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ edited_tests: editedTests })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                alert('Casos de teste salvos com sucesso!');
+            } catch (error) {
+                alert(`Erro ao salvar os casos de teste: ${error.message}`);
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Botão de voltar -->
+    <div class="Sair-container">
+        <a href="{{ url_for('index') }}" style="color: black;" onclick="saveFormData()">Voltar</a>
+    </div>
+
+    <!-- Container do Formulário -->
+    <div class="container">
+        <form id="test-form" action="/generate_automated_tests" method="POST" enctype="multipart/form-data" aria-labelledby="form-title">
+            <h1 id="form-title">Gerador de casos de testes automatizados</h1>
+            <label for="criteria">Forneça os critérios de aceitação:</label>
+            <textarea id="criteria" name="criteria" placeholder="Digite seus critérios de aceitação aqui..." required aria-required="true" style="display: block; margin: 0 auto;"></textarea>
+            <p id="format-info" style="color: black; font-weight: bold; margin-top: 5px;">
+                Nenhum formato de critério de aceitação específico detectado!
+            </p>
+            <br>
+            <label for="system_type">Tipo de sistema:</label>
+            <select id="system_type" name="system_type" required aria-required="true">
+                <option value="">Selecione</option>
+                <option value="Web">Web</option> 
+                <option value="API">API</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Desktop">Desktop</option>
+            </select>
+            <br>
+            <label for="framework">Framework de teste:</label>
+            <select id="framework" name="framework" required aria-required="true">
+                <option value="">Selecione</option>
+                <option value="Cypress">Cypress</option>
+                <option value="Playwright">Playwright</option>
+                <option value="Robot Framework">Robot Framework</option>
+                <option value="Selenium">Selenium</option>
+            </select>
+            <br>
+            <label for="image">Adicione imagens do sistema, para ter uma assertividade melhor na geração dos testes (opcional):</label>
+            <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/gif">
+
+            <div class="gerar-historico">
+                <button type="submit" aria-label="Gerar casos de teste">Gerar</button>
+                <button type="button" onclick="window.location.href='/historico'" aria-label="Ver Histórico">Histórico de testes gerados</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Container dos Resultados -->
+    <div id="loading" style="display: none;">
+        <div class="spinner" role="status" aria-live="polite"></div>
+        <p>Gerando casos de testes...</p>
+    </div>
+    <div class="container-results">
+        <div id="results" class="expandable">
+            <h2>Casos de Testes Gerados</h2>
+            <pre id="test-case-output"></pre>
+            <div class="edit-buttons">
+                <button onclick="enableEditing()"><i class="fas fa-edit"></i> Editar</button>
+                <button onclick="saveEdits()"><i class="fas fa-save"></i> Salvar Edições</button>
+            </div>
+        </div>
+        <!-- Botões de exportação -->
+        <button class="copy-button" id="copy-button" onclick="copyToClipboard()" style="display: none;" aria-label="Copiar casos de teste">Copiar</button>
+        <div id="export-buttons" style="display: none;">
+            <button onclick="exportCsv()" style="width: 100%;" aria-label="Exportar para CSV">Exportar para CSV</button>
+        </div>
+    </div>
+
+    <!-- Adiciona o VLibras -->
+    {{ vlibras_script|safe }}
+
+    <footer>
+        <p>&copy; 2025 CaseIA. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Função para salvar os dados do formulário no localStorage
+        function saveFormData() {
+            const criteria = document.getElementById('criteria').value;
+            const systemType = document.getElementById('system_type').value;
+            const framework = document.getElementById('framework').value;
+            const image = document.getElementById('image').files[0];
+
+            localStorage.setItem('tests_automatizados_criteria', criteria);
+            localStorage.setItem('tests_automatizados_systemType', systemType);
+            localStorage.setItem('tests_automatizados_framework', framework);
+
+            if (image) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    localStorage.setItem('tests_automatizados_image', e.target.result);
+                };
+                reader.readAsDataURL(image);
+            } else {
+                localStorage.removeItem('tests_automatizados_image'); // Remove a imagem se nenhuma for selecionada
+            }
+        }
+
+        // Função para restaurar os dados do formulário do localStorage
+        function restoreFormData() {
+            const criteria = localStorage.getItem('tests_automatizados_criteria');
+            const systemType = localStorage.getItem('tests_automatizados_systemType');
+            const framework = localStorage.getItem('tests_automatizados_framework');
+            const imageData = localStorage.getItem('tests_automatizados_image');
+
+            if (criteria) {
+                document.getElementById('criteria').value = criteria;
+            }
+            if (systemType) {
+                document.getElementById('system_type').value = systemType;
+            }
+            if (framework) {
+                document.getElementById('framework').value = framework;
+            }
+            if (imageData) {
+                const imagePreview = document.createElement('img');
+                imagePreview.src = imageData;
+                imagePreview.alt = "Imagem carregada";
+                imagePreview.style.maxWidth = "100px";
+                const existingPreview = document.querySelector('#image + img');
+                if (!existingPreview) {
+                    document.getElementById('image').insertAdjacentElement('afterend', imagePreview);
+                }
+            }
+        }
+
+        // Função para limpar os dados específicos do formulário no localStorage
+        function clearFormData() {
+            localStorage.removeItem('tests_automatizados_criteria');
+            localStorage.removeItem('tests_automatizados_systemType');
+            localStorage.removeItem('tests_automatizados_framework');
+            localStorage.removeItem('tests_automatizados_image');
+        }
+
+        /*
+        document.addEventListener('DOMContentLoaded', function () {
+            // Verificar se o usuário deseja restaurar os dados
+            const restore = confirm("Deseja restaurar os dados preenchidos anteriormente?");
+            if (restore) {
+            restoreFormData();
+            } else {
+            clearFormData();
+            }
+        });
+        */
+
+        // Salvar os dados ao sair da página
+        window.addEventListener('beforeunload', saveFormData);
+
+        // Função para detectar o formato do critério de aceitação
+        function detectarFormato(texto) {
+            const gherkinPattern = /^(Feature:|Scenario:|Given |When |Then )/mi;
+            const markdownPattern = /^(\#|\*|\-|\d\.)\s/m;
+
+            if (texto.trim() === "") {
+                return "vazio";
+            } else if (gherkinPattern.test(texto)) {
+                return "gherkin";
+            } else if (markdownPattern.test(texto)) {
+                return "markdown";
+            } else {
+                return "texto_livre";
+            }
+        }
+
+        // Captura elementos do DOM corretamente
+        document.addEventListener('DOMContentLoaded', function () {
+            const criteriaInput = document.getElementById('criteria');
+            const infoBox = document.getElementById('format-info');
+
+            // Função para atualizar a mensagem de formato
+            function atualizarMensagem() {
+                const texto = criteriaInput.value.trim();
+                
+                if (texto === "") {
+                    infoBox.textContent = "Nenhum formato de critério de aceitação específico detectado!";
+                    infoBox.style.color = "black";
+                    infoBox.style.display = "block";
+                } else {
+                    const formato = detectarFormato(texto);
+
+                    if (formato === "gherkin") {
+                        infoBox.textContent = "📌 Formato de critério(s) de aceitação detectado como: Gherkin";
+                        infoBox.style.color = "red";
+                    } else if (formato === "markdown") {
+                        infoBox.textContent = "📌 Formato de critério(s) de aceitação detectado como: Markdown";
+                        infoBox.style.color = "red";
+                    } else {
+                        infoBox.textContent = "Formato de critério(s) de aceitação detectado como: Texto livre";
+                        infoBox.style.color = "red";
+                    }
+
+                    infoBox.style.display = "block";
+                }
+            }
+
+            // Adiciona evento para atualizar mensagem ao digitar no campo
+            criteriaInput.addEventListener('input', atualizarMensagem);
+
+            // Garante que a mensagem apareça corretamente ao carregar a página
+            atualizarMensagem();
+        });
+
+        // Código para manipular o formulário e requisição de testes
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('test-form');
+            const output = document.getElementById('test-case-output');
+            const exportButtons = document.getElementById('export-buttons');
+            const copyButton = document.getElementById('copy-button');
+            const loading = document.getElementById('loading');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                // Exibir loading
+                loading.style.display = 'flex';
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch('/generate_automated_tests', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Erro: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    output.textContent = data.test_cases;
+
+                    document.querySelector('.container-results').style.display = 'block';
+                    document.querySelector('.expandable').style.display = 'block';
+
+                    exportButtons.style.display = 'flex';
+                    copyButton.style.display = 'inline-block';
+
+                } catch (error) {
+                    output.textContent = `Erro: ${error.message}`;
+                    exportButtons.style.display = 'none';
+                    copyButton.style.display = 'none';
+                } finally {
+                    // Esconder loading após resposta
+                    loading.style.display = 'none';
+                }
+            });
+        });
+
+        function exportCsv() {
+            window.location.href = '/export_csv';
+        }
+
+        function exportXlsx() {
+            window.location.href = '/export_xlsx';
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const frameworksBySystem = {
+                "Web": ["Cypress", "Playwright", "Robot Framework", "Selenium"],
+                "API": ["Robot Framework", "Postman"],
+                "Mobile": ["Appium", "Robot Framework"],
+                "Desktop": ["Pywinauto", "Robot Framework"]
+            };
+
+            const systemTypeSelect = document.getElementById("system_type");
+            const frameworkSelect = document.getElementById("framework");
+
+            systemTypeSelect.addEventListener("change", function () {
+                const selectedSystem = systemTypeSelect.value;
+                frameworkSelect.innerHTML = "<option value=''>Selecione</option>"; // Resetar opções
+
+                if (selectedSystem && frameworksBySystem[selectedSystem]) {
+                    frameworksBySystem[selectedSystem].forEach(framework => {
+                        let option = document.createElement("option");
+                        option.value = framework;
+                        option.textContent = framework;
+                        frameworkSelect.appendChild(option);
+                    });
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

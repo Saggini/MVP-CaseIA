@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Testes Gerados</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicon-16x16.png" type="image/x-icon" alt="Ícone do site">
+    <link rel="icon" href="/static/img/favicon-32x32.png" type="image/x-icon" alt="Ícone do site">
+</head>
+<body>
+<div class="navbar">
+    <h1>Histórico de Testes</h1>
+</div>
+<div class="Sair-container">
+    <a href="{{ url_for('index') }}" style="color: black;">Voltar</a>
+</div>
+<div class="historico-container2">
+    <input type="text" id="search-input" placeholder="Buscar no histórico..." oninput="filtrarHistorico()">
+    <button type="button" onclick="limparBusca()">Limpar</button>
+    <div id="loading" style="display: none;">Carregando histórico...</div>
+    <div id="history-container">
+        <p id="no-history-message" style="display: none; text-align: center; color: #555; font-size: 1.2rem; margin-top: 20px;">
+            Nenhum histórico de testes disponível. Gere novos testes para visualizá-los aqui.
+        </p>
+    </div>
+    <div id="pagination" style="display: flex; justify-content: center; margin-top: 20px;"></div>
+    <button class="back-btn" type="button" onclick="window.location.href='/index'">⬅️ Voltar</button>
+</div>
+
+<!-- Adiciona o VLibras -->
+{{ vlibras_script|safe }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        exibirHistorico();
+    });
+
+    let historicoCompleto = [];
+    let itensPorPagina = 5;
+    let paginaAtual = 1;
+
+    async function exibirHistorico() {
+        try {
+            document.getElementById('loading').style.display = 'block';
+            const response = await fetch('/api/historico');
+            historicoCompleto = await response.json();
+            document.getElementById('loading').style.display = 'none';
+
+            if (historicoCompleto.length === 0) {
+                document.getElementById('no-history-message').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('no-history-message').style.display = 'none';
+            atualizarPaginacao();
+            renderizarPagina();
+        } catch (error) {
+            console.error('Erro ao carregar histórico:', error);
+            document.getElementById('history-container').innerHTML = '<p>Erro ao carregar histórico.</p>';
+        }
+    }
+
+    function renderizarPagina() {
+        const historyContainer = document.getElementById('history-container');
+        historyContainer.innerHTML = '';
+
+        const inicio = (paginaAtual - 1) * itensPorPagina;
+        const fim = inicio + itensPorPagina;
+        const historicoPaginado = historicoCompleto.slice(inicio, fim);
+
+        historicoPaginado.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.classList.add('historico-item-container');
+
+            div.innerHTML = `
+                <p><strong>Teste #${inicio + index + 1}:</strong></p>
+                <pre>${item.test_cases}</pre>
+                <button class="copy-btn" type="button" data-test-cases="${encodeURIComponent(item.test_cases)}" onclick="copiarHistorico(this)">📋 Copiar</button>
+            `;
+
+            historyContainer.appendChild(div);
+        });
+    }
+
+    function atualizarPaginacao() {
+        const totalPaginas = Math.ceil(historicoCompleto.length / itensPorPagina);
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = '';
+
+        for (let i = 1; i <= totalPaginas; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.classList.add('pagination-btn');
+            if (i === paginaAtual) button.classList.add('active');
+            button.addEventListener('click', () => {
+                paginaAtual = i;
+                renderizarPagina();
+                atualizarPaginacao();
+            });
+            paginationContainer.appendChild(button);
+        }
+    }
+
+    function copiarHistorico(button) {
+        const testCases = decodeURIComponent(button.getAttribute('data-test-cases'));
+        navigator.clipboard.writeText(testCases).then(() => {
+            alert('Teste copiado para a área de transferência!');
+        }).catch(err => {
+            console.error('Erro ao copiar:', err);
+        });
+    }
+
+    function filtrarHistorico() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        historicoCompleto = historicoCompleto.filter(item => item.test_cases.toLowerCase().includes(searchInput));
+        paginaAtual = 1;
+        atualizarPaginacao();
+        renderizarPagina();
+    }
+
+    function limparBusca() {
+        document.getElementById('search-input').value = '';
+        exibirHistorico();
+    }
+</script>
+
+</body>
+</html>
